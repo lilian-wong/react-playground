@@ -1,5 +1,7 @@
 import React from 'react';
 
+let timeoutID;
+
 class RouletteGun extends React.Component{
     constructor(props){
         super(props)
@@ -9,20 +11,39 @@ class RouletteGun extends React.Component{
         }
     }
     
-    updatespinningTheChamber = () => {
+    spinTheChamber = () => {
+        
         this.setState({spinningTheChamber: true})
-        window.setTimeout(() => {
+        timeoutID = window.setTimeout(() => {
             let randomNumber = Math.floor(Math.random()*10) +1;
-            console.log(randomNumber===this.props.bulletInChamber);
-         
+            this.setState({
+                chamber: randomNumber,
+                spinningTheChamber: false
+            })
         }, 2000);
     }
   
+    componentWillUnmount(){
+        window.clearTimeout(timeoutID);
+    }
+
     render(){
+
+        let message = '';
+        if(this.state.spinningTheChamber===true){
+            message = 'spinning the chamber and pulling the trigger!';
+        }
+        else if(this.state.chamber===this.props.bulletInChamber){
+            message = 'BANG!!!!'
+        }
+        else{
+            message = 'you\'re safe!!'
+        }
+
         return(
             <div>
-                <p></p>
-                <button onClick = {this.updatespinningTheChamber}>Pull the trigger!</button>
+                <button onClick = {this.spinTheChamber}>Pull the trigger!</button>
+                <p>{message}</p>
             </div>
         )
     }
