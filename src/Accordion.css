@@ -1,0 +1,7 @@
+.sections{
+    list-style: none;
+}
+
+.sections li{
+    margin: 25px;
+}
